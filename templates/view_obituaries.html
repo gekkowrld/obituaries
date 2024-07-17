@@ -1,0 +1,22 @@
+{% extends 'pages.html' %}
+
+{% block main %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Slug</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obituary in obituaries %}
+            <tr>
+          <td><a href="{{ url_for('view', id=obituary[0]) }}">{{ obituary[1] }}</a></td>
+                <td>{{ obituary[2] }}</td>
+                <td>{{ obituary[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
