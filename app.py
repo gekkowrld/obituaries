@@ -2,8 +2,8 @@
 
 import sqlite3
 from datetime import date, datetime
-import humanize
 
+import humanize
 import markdown2
 from flask import Flask, render_template, request, url_for
 from markupsafe import Markup
@@ -51,46 +51,58 @@ def home():
 def form():
     form = Posting(request.form)
     img = url_for("static", filename="favicon.svg", _external=True)
-    if request.method == "POST" and form.validate():
-        form_data = FormData(
-            name=request.form["name"],
-            date_of_birth=request.form["dob"],
-            date_of_death=request.form["dod"],
-            content=request.form["content"],
-            author=request.form["author"],
-            slug=request.form["slug"],
-        )
 
-        isSaved = save_to_db(form_data)
+    if request.method == "POST":
+        if form.validate():
+            form_data = FormData(
+                name=request.form["name"],
+                date_of_birth=request.form["dob"],
+                date_of_death=request.form["dod"],
+                content=request.form["content"],
+                author=request.form["author"],
+                slug=request.form["slug"],
+            )
 
-        if isSaved is not None:
+            is_saved = save_to_db(form_data)
+
+            if is_saved is not None:
+                return render_template(
+                    "submit_msg.html",
+                    title="Form not submitted because of an error",
+                    header="An error occured when trying to submit your memory, we are sorry :(",
+                    msg=is_saved,
+                    error=True,
+                    canonical_url=url_for("form", _external=True),
+                    description=desc,
+                    og_image=img,
+                )
+
             return render_template(
                 "submit_msg.html",
-                title="unSubmitted",
-                msg=isSaved,
+                title="Form Submitted successfully",
+                header=f"{form_data.author}, {form_data.name} will now be honored because of you!",
+                msg="""
+Thank you for submitting the obituary. Your contribution helps honor the memory of your loved one and shares their story with others.
+If you have any further updates or would like to make changes, please don't hesitate to contact us.
+We appreciate your trust in us during this difficult time.
+                """,
                 canonical_url=url_for("form", _external=True),
                 description=desc,
                 og_image=img,
             )
 
-        return render_template(
-            "submit_msg.html",
-            title="Submitted",
-            msg="You have submitted it!",
-            canonical_url=url_for("form", _external=True),
-            description=desc,
-            og_image=img,
-        )
-
-    if request.method == "POST" and not form.validate():
-        return render_template(
-            "submit_msg.html",
-            title="unSubmitted",
-            msg="Errored on your face!",
-            canonical_url=url_for("form", _external=True),
-            description=desc,
-            og_image=img,
-        )
+        else:
+            validation_errors = form.errors
+            return render_template(
+                "submit_msg.html",
+                title="Form validation errors",
+                msg="We are glad that you're honoring your beloved, but we can't add them to our list of memories because of:",
+                errors=validation_errors,
+                error=True,
+                canonical_url=url_for("form", _external=True),
+                description=desc,
+                og_image=img,
+            )
 
     return render_template(
         "obituary_form.html",
@@ -130,7 +142,11 @@ def save_to_db(res: FormData) -> str | None:
             ),
         )
         conn.commit()
-    except sqlite3.Error:
+    except sqlite3.Error as e:
+        if e.__str__() == "UNIQUE constraint failed: obituaries.slug":
+            return f"The slug that you have submitted is already in use, please change it to something else\n\n`{res.slug}`"
+        if e.__str__().__contains__("no such table"):
+            return "An error occured on our side, the tables in which we place the memories cannot be found :("
         return "Data was not saved!"
     finally:
         # Close the connection no matter what
@@ -151,8 +167,13 @@ def view():
             if not obituaries:
                 return render_template(
                     "submit_msg.html",
-                    title="unSubmitted",
-                    msg="What did the table say? I'm zeeeeero",
+                    title="No one has sent their memories, can you be the first?",
+                    msg="""
+Sometimes silence can be the best memory that we have.
+
+We have no memories in our collection, submit some through our form.
+                    """,
+                    error=True,
                     canonical_url=url_for("home", _external=True),
                     description=desc,
                     og_image=img,
@@ -162,14 +183,19 @@ def view():
             obituaries = cur.fetchall()
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
-        return render_template(
-            "submit_msg.html",
-            title="unSubmitted",
-            msg="What did the table say? Gooone!",
-            canonical_url=url_for("view", _external=True),
-            description=desc,
-            og_image=img,
-        )
+        if e.__str__().__contains__("no such table"):
+            return render_template(
+                "submit_msg.html",
+                title="500: An Error occured",
+                msg="""
+An error occured on our side, the tables in which we place the memories cannot be found :(
+We'll try to create another one just for you!
+""",
+                canonical_url=url_for("view", _external=True),
+                error=True,
+                description=desc,
+                og_image=img,
+            )
     finally:
         conn.close()
 
@@ -194,8 +220,11 @@ def view():
                 "details.html",
                 title=ob[1],
                 obituary=ob,
-                time=f"{ob[6]} ({humanize.naturaltime(datetime.strptime(ob[6], "%Y-%m-%d %H:%M:%S"))})",
-                live_age=humanize.naturaldate(datetime.strptime(ob[3], "%Y-%m-%d")-datetime.strptime(ob[2], "%Y-%m-%d")).split(',')[0],
+                time=f"{ob[6]} UTC ({humanize.naturaltime(datetime.strptime(ob[6], "%Y-%m-%d %H:%M:%S"))})",
+                live_age=humanize.naturaldate(
+                    datetime.strptime(ob[3], "%Y-%m-%d")
+                    - datetime.strptime(ob[2], "%Y-%m-%d")
+                ).split(",")[0],
                 description=ob[7],
                 og_image=img,
                 content=content,

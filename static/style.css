@@ -12,7 +12,7 @@ font-family: "Space Grotesk", sans-serif;
   hyphens: manual;
 }
 
-code {
+code, pre {
   font-family: "Fira Code", monospace;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -25,6 +25,11 @@ code {
   margin: 10px;
   background: #7ba5d8;
   border-radius: 4px;
+}
+
+pre.error {
+  background: #343434;
+  color: #ff97a0;
 }
 
 input[type="text"],
