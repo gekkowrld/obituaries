@@ -1,5 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
+import inspect
+import math
+import secrets
 import sqlite3
 from datetime import date, datetime
 
@@ -8,6 +11,7 @@ import markdown2
 from flask import Flask, render_template, request, url_for
 from markupsafe import Markup
 from pydantic import BaseModel
+from slugify import slugify
 from wtforms import DateField, Form, StringField, validators
 
 app = Flask(__name__, static_folder="static")
@@ -54,13 +58,14 @@ def form():
 
     if request.method == "POST":
         if form.validate():
+
             form_data = FormData(
                 name=request.form["name"],
                 date_of_birth=request.form["dob"],
                 date_of_death=request.form["dod"],
                 content=request.form["content"],
                 author=request.form["author"],
-                slug=request.form["slug"],
+                slug=get_unique_slug(request.form["name"]),
             )
 
             is_saved = save_to_db(form_data)
@@ -82,9 +87,9 @@ def form():
                 title="Form Submitted successfully",
                 header=f"{form_data.author}, {form_data.name} will now be honored because of you!",
                 msg="""
-Thank you for submitting the obituary. Your contribution helps honor the memory of your loved one and shares their story with others.
-If you have any further updates or would like to make changes, please don't hesitate to contact us.
-We appreciate your trust in us during this difficult time.
+                Thank you for submitting the obituary. Your contribution helps honor the memory of your loved one and shares their story with others.
+                If you have any further updates or would like to make changes, please don't hesitate to contact us.
+                We appreciate your trust in us during this difficult time.
                 """,
                 canonical_url=url_for("form", _external=True),
                 description=desc,
@@ -112,6 +117,41 @@ We appreciate your trust in us during this difficult time.
         description=desc,
         og_image=img,
     )
+
+
+def render_submit_template(title: str,msg: str, canonical_url = None, error: bool = False):
+    img = url_for("static", filename="favicon.svg", _external=True)
+    if canonical_url is None:
+        calee_name = inspect.currentframe().f_back.f_code.co_qualname # Rely on feature introduced in python3.11 (https://stackoverflow.com/a/78562834)
+        canonical_url = url_for(calee_name, _external=True)
+
+    return render_template(
+        "submit_msg.html",
+        title=title,
+        msg=msg,
+        canonical_url=canonical_url,
+        description=desc,
+        error=error,
+        og_image=img,
+    )
+
+
+def get_unique_slug(name: str) -> str:
+    base_slug = slugify(name)
+    conn = sqlite3.connect("obituary_platform")
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT slug FROM obituaries WHERE slug=?", (base_slug,))
+        existing_slug = cur.fetchone()
+        # If slug exists, then generate until we find a good one.
+        # This removes spoofing of how many 'same' urls are there by looking at the url
+        while existing_slug:
+            base_slug = f"{base_slug}-{secrets.token_hex(2)}"  # Use 2 as that is a bit reasonable
+            cur.execute("SELECT slug FROM obituaries WHERE slug=?", (base_slug,))
+            existing_slug = cur.fetchone()
+    finally:
+        conn.close()
+    return base_slug
 
 
 def save_to_db(res: FormData) -> str | None:
@@ -143,8 +183,6 @@ def save_to_db(res: FormData) -> str | None:
         )
         conn.commit()
     except sqlite3.Error as e:
-        if e.__str__() == "UNIQUE constraint failed: obituaries.slug":
-            return f"The slug that you have submitted is already in use, please change it to something else\n\n`{res.slug}`"
         if e.__str__().__contains__("no such table"):
             return "An error occured on our side, the tables in which we place the memories cannot be found :("
         return "Data was not saved!"
@@ -157,30 +195,37 @@ def save_to_db(res: FormData) -> str | None:
 def view():
     img = url_for("static", filename="favicon.svg", _external=True)
     conn = sqlite3.connect("obituary_platform")
-    req_id = request.args.get("id")
-    try:
-        obituaries = []
-        cur = conn.cursor()
-        if req_id is None:
-            cur.execute("SELECT id, name, author, slug FROM obituaries")
-            obituaries = cur.fetchall()
-            if not obituaries:
-                return render_template(
-                    "submit_msg.html",
-                    title="No one has sent their memories, can you be the first?",
-                    msg="""
-Sometimes silence can be the best memory that we have.
 
-We have no memories in our collection, submit some through our form.
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM obituaries")
+        total_obituaries = cur.fetchone()[0]
+
+        page = request.args.get("page", default=1, type=int)
+        per_page = 10
+        num_pages = math.ceil(total_obituaries / per_page)
+
+        offset = (page - 1) * per_page
+
+        cur.execute(
+            "SELECT name, author, content, slug, date_of_death, date_of_birth FROM obituaries LIMIT ? OFFSET ?",
+            (per_page, offset),
+        )
+        obituaries = cur.fetchall()
+        if not obituaries:
+            return render_template(
+                "submit_msg.html",
+                title="No one has sent their memories, can you be the first?",
+                msg="""
+                    Sometimes silence can be the best memory that we have.
+                    
+                    We have no memories in our collection, submit some through our form.
                     """,
-                    error=True,
-                    canonical_url=url_for("home", _external=True),
-                    description=desc,
-                    og_image=img,
-                )
-        else:
-            cur.execute("SELECT * FROM obituaries WHERE id=?", (req_id,))
-            obituaries = cur.fetchall()
+                error=True,
+                canonical_url=url_for("home", _external=True),
+                description=desc,
+                og_image=img,
+            )
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
         if e.__str__().__contains__("no such table"):
@@ -188,9 +233,9 @@ We have no memories in our collection, submit some through our form.
                 "submit_msg.html",
                 title="500: An Error occured",
                 msg="""
-An error occured on our side, the tables in which we place the memories cannot be found :(
-We'll try to create another one just for you!
-""",
+                An error occured on our side, the tables in which we place the memories cannot be found :(
+                We'll try to create another one just for you!
+                """,
                 canonical_url=url_for("view", _external=True),
                 error=True,
                 description=desc,
@@ -199,39 +244,72 @@ We'll try to create another one just for you!
     finally:
         conn.close()
 
-    if req_id is None:
+    return render_template(
+        "view_obituaries.html",
+        title="View Obituaries",
+        obituaries=obituaries,
+        pagination_info=dict(
+            page=page, per_page=per_page, total=total_obituaries, pages=num_pages
+        ),
+        canonical_url=url_for("view", _external=True),
+        description=desc,
+        og_image=img,
+    )
+
+
+@app.route("/view/<slug>")
+def view_obituary(slug):
+    img = url_for("static", filename="favicon.svg", _external=True)
+    conn = sqlite3.connect("obituary_platform")
+
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM obituaries WHERE slug=?", (slug,))
+        obituary = cur.fetchone()
+
+        if obituary is None:
+            return page_not_found("Obituary not found")
+
+        content = obituary[4]
+        if obituary and obituary[4]:
+            content = Markup(
+                markdown2.markdown(obituary[4])
+            )  # Trust the user to do the right thing!
+
         return render_template(
-            "view_obituaries.html",
-            title="View Obituaries",
-            obituaries=obituaries,
-            canonical_url=url_for("view", _external=True),
-            description=desc,
+            "details.html",
+            title=obituary[1],
+            obituary=obituary,
+            time=f"{obituary[6]} UTC ({humanize.naturaltime(datetime.strptime(obituary[6], '%Y-%m-%d %H:%M:%S'))})",
+            live_age=humanize.naturaldate(
+                datetime.strptime(obituary[3], "%Y-%m-%d")
+                - datetime.strptime(obituary[2], "%Y-%m-%d")
+            ).split(",")[0],
+            description=obituary[7],
             og_image=img,
+            content=content,
+            canonical_url=url_for("view_obituary", slug=slug, _external=True),
         )
-    else:
-        try:
-            ob = obituaries[0]
-            content = ob[4]
-            if ob and ob[4]:
-                content = Markup(
-                    markdown2.markdown(ob[4])
-                )  # Trust the user to do the right thing!
+
+    except sqlite3.Error as e:
+        print(f"SQLite error: {e}")
+        if e.__str__().__contains__("no such table"):
             return render_template(
-                "details.html",
-                title=ob[1],
-                obituary=ob,
-                time=f"{ob[6]} UTC ({humanize.naturaltime(datetime.strptime(ob[6], "%Y-%m-%d %H:%M:%S"))})",
-                live_age=humanize.naturaldate(
-                    datetime.strptime(ob[3], "%Y-%m-%d")
-                    - datetime.strptime(ob[2], "%Y-%m-%d")
-                ).split(",")[0],
-                description=ob[7],
+                "submit_msg.html",
+                title="500: An Error occured",
+                msg="""
+                An error occured on our side, the tables in which we place the memories cannot be found :(
+                We'll try to create another one just for you!
+                """,
+                canonical_url=url_for("view_obituary", slug=slug, _external=True),
+                error=True,
+                description=desc,
                 og_image=img,
-                content=content,
-                canonical_url=url_for("view", _external=True),
             )
-        except IndexError:
-            return page_not_found("Id is out of range!!")
+    finally:
+        conn.close()
+
+    return page_not_found("Obituary not found")
 
 
 class Posting(Form):
@@ -240,7 +318,6 @@ class Posting(Form):
     dod = DateField("dod", [validators.DataRequired()])  # Date of death
     content = StringField("content", [validators.Length(min=10)])  # Let them cook
     author = StringField("author", [validators.Length(min=4, max=95)])  # Max 100
-    slug = StringField("slug", [validators.Length(min=7, max=250)])  # Max 255
 
 
 @app.errorhandler(404)

@@ -253,3 +253,19 @@ input[type="submit"].disable {
   background: grey;
   cursor: not-allowed;
 }
+
+table#obituaries-table thead th {
+  cursor: pointer;
+}
+
+th.desc::after {
+  content: ' (desc)';
+  color: #006dad;
+  font-style: italic;
+}
+
+th.asc::after {
+  content: ' (asc)';
+  color: #006dad;
+  font-style: italic;
+}

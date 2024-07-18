@@ -1,22 +1,84 @@
 {% extends 'pages.html' %}
 
 {% block main %}
-    <table>
+    <table id="obituaries-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Slug</th>
+                <th data-sort="name">Name</th>
+                <th data-sort="date_of_death">Died on</th>
+                <th data-sort="author">Author</th>
+                <th data-sort="content">Content Preview</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="obituaries-body">
             {% for obituary in obituaries %}
             <tr>
-          <td><a href="{{ url_for('view', id=obituary[0]) }}">{{ obituary[1] }}</a></td>
-                <td>{{ obituary[2] }}</td>
-                <td>{{ obituary[3] }}</td>
+                <td><a href="{{ url_for('view_obituary', slug=obituary[3]) }}">{{ obituary[0] }}</a></td>
+                <td>{{ obituary[4] }}</td>
+                <td>{{ obituary[1] }}</td>
+                <td>{{ obituary[2][:50] }}...</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    
+    {% if pagination_info['pages'] > 1 %}
+    <div class="pagination">
+        {% if pagination_info['page'] > 1 %}
+            <a href="{{ url_for('view', page=1) }}">First</a>
+            <a href="{{ url_for('view', page=pagination_info['page'] - 1) }}">Previous</a>
+        {% endif %}
+        
+        {% for num in range(1, pagination_info['pages'] + 1) %}
+            {% if num == pagination_info['page'] %}
+                <span>{{ num }}</span>
+            {% else %}
+                <a href="{{ url_for('view', page=num) }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination_info['page'] < pagination_info['pages'] %}
+            <a href="{{ url_for('view', page=pagination_info['page'] + 1) }}">Next</a>
+            <a href="{{ url_for('view', page=pagination_info['pages']) }}">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
 {% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+        const comparer = (idx, asc) => (a, b) => {
+            return ((v1, v2) => 
+                v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+            )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+        };
+
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', function() {
+                const table = th.closest('table');
+                const isAsc = th.classList.contains('asc');
+                
+                // Remove 'asc' or 'desc' from all headers
+                table.querySelectorAll('th').forEach(header => {
+                    header.classList.remove('asc', 'desc');
+                });
+                
+                // Set current sort direction
+                th.classList.toggle('asc', !isAsc);
+                th.classList.toggle('desc', isAsc);
+                
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                rows.sort(comparer(Array.from(th.parentNode.children).indexOf(th), !isAsc));
+                
+                // Re-append sorted rows to the tbody
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+</script>
+{% endblock %}
+
