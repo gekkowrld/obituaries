@@ -1,10 +1,18 @@
 {% extends 'pages.html' %}
+
 {% block main %}
-<h1>{{obituary[1]}}</h1>
-<i>{{obituary[6]}}</i>
-<p>Author {{obituary[5]}}</p>
-<p>Born {{obituary[2]}}</p>
-<p>Death {{obituary[3]}}</p>
-{{content}}
-<i>{{obituary[7]}}</i>
+<div class="obituary-details">
+  <h1>{{ obituary[1] }}</h1>
+  <i>{{ obituary[6] }}</i>
+  <p><strong>Author:</strong> {{ obituary[5] }}</p>
+  <p><strong>Born:</strong> {{ obituary[2] }}</p>
+  <p><strong>Death:</strong> {{ obituary[3] }}</p>
+  <hr>
+  <div class="obituary-content">
+    {{ content }}
+  </div>
+  <hr>
+  <i>{{ obituary[7] }}</i>
+</div>
 {% endblock %}
+

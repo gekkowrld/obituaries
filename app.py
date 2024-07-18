@@ -38,7 +38,7 @@ def home():
     img = url_for("static", filename="favicon.svg", _external=True)
 
     return render_template(
-        "pages.html",
+        "home.html",
         title="Home",
         canonical_url=url_for("home", _external=True),
         description=desc,
