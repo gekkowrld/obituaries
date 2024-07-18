@@ -119,10 +119,14 @@ def form():
     )
 
 
-def render_submit_template(title: str,msg: str, canonical_url = None, error: bool = False):
+def render_submit_template(
+    title: str, msg: str, canonical_url=None, error: bool = False
+):
     img = url_for("static", filename="favicon.svg", _external=True)
     if canonical_url is None:
-        calee_name = inspect.currentframe().f_back.f_code.co_qualname # Rely on feature introduced in python3.11 (https://stackoverflow.com/a/78562834)
+        calee_name = (
+            inspect.currentframe().f_back.f_code.co_qualname
+        )  # Rely on feature introduced in python3.11 (https://stackoverflow.com/a/78562834)
         canonical_url = url_for(calee_name, _external=True)
 
     return render_template(

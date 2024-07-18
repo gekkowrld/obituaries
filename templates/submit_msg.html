@@ -1,15 +1,11 @@
-{% extends 'pages.html' %}
-{% block main %}
+{% extends 'pages.html' %} {% block main %}
 <h1>{{header}}</h1>
-<pre {% if error %}class="error"{% endif %}>{{msg}}</pre>
+<pre {% if error %}class="error" {% endif %}>{{msg}}</pre>
 {% if errors %}
-  <ul class="errors">
-    {% for field, error_msgs in errors.items() %}
-      {% for error_msg in error_msgs %}
-        <li>{{ field }}: {{ error_msg }}</li>
-      {% endfor %}
-    {% endfor %}
-  </ul>
-{% endif %}
-
-{% endblock %}
+<ul class="errors">
+  {% for field, error_msgs in errors.items() %} {% for error_msg in error_msgs
+  %}
+  <li>{{ field }}: {{ error_msg }}</li>
+  {% endfor %} {% endfor %}
+</ul>
+{% endif %} {% endblock %}

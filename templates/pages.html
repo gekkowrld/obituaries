@@ -1,20 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/x-icon">
-    <title>{{title}} | Empowering Memories Online </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" >
-    <meta name="description" content="{{ description }}">
-  <meta property="og:title" content="{{ title }}">
-  <meta property="og:description" content="{{ description }}">
-  <meta property="og:image" content="{{ og_image }}">
-  <meta property="og:url" content="{{ canonical_url }}">
-  <meta property="og:type" content="article">
-  <link rel="canonical" href="{{ canonical_url }}">
-    {% block script %}
-    {% endblock %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='favicon.svg') }}"
+      type="image/x-icon"
+    />
+    <title>{{title}} | Empowering Memories Online</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <meta name="description" content="{{ description }}" />
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <meta property="og:image" content="{{ og_image }}" />
+    <meta property="og:url" content="{{ canonical_url }}" />
+    <meta property="og:type" content="article" />
+    <link rel="canonical" href="{{ canonical_url }}" />
+    {% block script %} {% endblock %}
   </head>
   <body>
     <header>
@@ -22,12 +28,9 @@
       <a href="{{ url_for('form') }}">Form</a>
       <a href="{{ url_for('view') }}">View</a>
     </header>
-    <main>
-    {% block main %}
-    {% endblock %}
-    </main>
+    <main>{% block main %} {% endblock %}</main>
     <footer>
-      <hr>
+      <hr />
       &copy; 2024 Eternal Tributes: Empowering Memories Online
     </footer>
   </body>

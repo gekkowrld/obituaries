@@ -1,271 +1,271 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Space+Grotesk:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Space+Grotesk:wght@300..700&display=swap");
 
 body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  margin: 0;
-  padding: 10px;
-  background: #dfeaf7;
-font-family: "Space Grotesk", sans-serif;
-  overflow-wrap: break-word;
-  hyphens: manual;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	margin: 0;
+	padding: 10px;
+	background: #dfeaf7;
+	font-family: "Space Grotesk", sans-serif;
+	overflow-wrap: break-word;
+	hyphens: manual;
 }
 
-code, pre {
-  font-family: "Fira Code", monospace;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  overflow-x: auto;
-  white-space: pre;
-  border: 1px solid #ccc;
-  display: block;
-  padding: 10px;
-  margin: 10px;
-  background: #7ba5d8;
-  border-radius: 4px;
+code,
+pre {
+	font-family: "Fira Code", monospace;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	overflow-x: auto;
+	white-space: pre;
+	border: 1px solid #ccc;
+	display: block;
+	padding: 10px;
+	margin: 10px;
+	background: #7ba5d8;
+	border-radius: 4px;
 }
 
 pre.error {
-  background: #343434;
-  color: #ff97a0;
+	background: #343434;
+	color: #ff97a0;
 }
 
 input[type="text"],
 input[type="date"],
 textarea {
-  resize: vertical;
-  width: 90%;
-  padding: 8px;
-  margin: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-font-family: "Space Grotesk", sans-serif;
-  font-size: 17px;
+	resize: vertical;
+	width: 90%;
+	padding: 8px;
+	margin: 6px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-family: "Space Grotesk", sans-serif;
+	font-size: 17px;
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus,
 textarea:focus {
-  outline: 1px solid black;
+	outline: 1px solid black;
 }
 
 input[type="text"].error,
 input[type="date"].error,
 textarea.error {
-  border: 1px solid red;
+	border: 1px solid red;
 }
 
 img {
-  max-width: 90%;
+	max-width: 90%;
 }
 
-input[type="submit"],label{
-  padding: 5px;
-font-family: "Space Grotesk", sans-serif;
-  font-size: 21px;
+input[type="submit"],
+label {
+	padding: 5px;
+	font-family: "Space Grotesk", sans-serif;
+	font-size: 21px;
 }
 
 input[type="submit"] {
-  background: #00547d;
-  padding: 10px;
-  border: 1px solid #1e1e1e;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
+	background: #00547d;
+	padding: 10px;
+	border: 1px solid #1e1e1e;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
 .text_area {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin: 6px;
-  width: 93%;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin: 6px;
+	width: 93%;
 }
 
 .tafg {
-  margin: 5px 20px;
-  gap: 12px;
+	margin: 5px 20px;
+	gap: 12px;
 }
 
 textarea {
-  display: block;
-  height: 150px;
-  font-family: "Fira Code", monospace;
+	display: block;
+	height: 150px;
+	font-family: "Fira Code", monospace;
 }
 
-
 .my_form {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #fff;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
-  margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 label {
-  font-weight: 500;
+	font-weight: 500;
 }
 
-textarea:invalid, .input-error {
-  border-color: #dc3545;
+textarea:invalid,
+.input-error {
+	border-color: #dc3545;
 }
 
 header {
-  background-color: #333;
-  padding: 10px 20px;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 8px;
-  margin:  0 0 20px 0;
+	background-color: #333;
+	padding: 10px 20px;
+	color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 8px;
+	margin: 0 0 20px 0;
 }
 
 header a {
-  color: #fff;
-  text-decoration: none;
-  padding: 10px;
-  transition:background-color 0.3s ease;
-font-family: "Space Grotesk", sans-serif;
+	color: #fff;
+	text-decoration: none;
+	padding: 10px;
+	transition: background-color 0.3s ease;
+	font-family: "Space Grotesk", sans-serif;
 }
 
 header a:hover {
-  background-color: #555;
+	background-color: #555;
 }
 
 table {
-      border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 table thead tr {
-      background-color: #009879;
-    color: #ffffff;
-    text-align: left;
+	background-color: #009879;
+	color: #ffffff;
+	text-align: left;
 }
 
 table th,
-table td{
-  padding: 12px 15px;
-font-family: "Space Grotesk", sans-serif;
+table td {
+	padding: 12px 15px;
+	font-family: "Space Grotesk", sans-serif;
 }
 
 table tbody tr {
-  border-bottom: thin solid #dddddd;
+	border-bottom: thin solid #dddddd;
 }
 
 table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+	background-color: #f3f3f3;
 }
 
 table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+	border-bottom: 2px solid #009879;
 }
 
 table tbody tr:hover {
-    color: #009879;
-  font-weight: bolder;
+	color: #009879;
+	font-weight: bolder;
 }
 
-.home-text{
-  border: 2px solid #c39c65;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 7px;
-  background: #dee4e4;
-  animation: colorAnimation 5s infinite alternate ease-in-out;
+.home-text {
+	border: 2px solid #c39c65;
+	padding: 20px;
+	margin: 20px;
+	border-radius: 7px;
+	background: #dee4e4;
+	animation: colorAnimation 5s infinite alternate ease-in-out;
 }
-
 
 @keyframes colorAnimation {
-  0% {
-    background-color: #dee4e4;
-  }
-  50% {
-    background-color: #c5d1d1;
-  }
-  100% {
-    background-color: #dee4e4;
-  }
+	0% {
+		background-color: #dee4e4;
+	}
+	50% {
+		background-color: #c5d1d1;
+	}
+	100% {
+		background-color: #dee4e4;
+	}
 }
 
 .obituary-details {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: #f9f9f9;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .obituary-details h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+	font-size: 28px;
+	margin-bottom: 10px;
 }
 
 .obituary-details i {
-  font-style: italic;
-  color: #666;
+	font-style: italic;
+	color: #666;
 }
 
 .obituary-details p {
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .obituary-details hr {
-  border: none;
-  border-top: 1px solid #ccc;
-  margin: 20px 0;
+	border: none;
+	border-top: 1px solid #ccc;
+	margin: 20px 0;
 }
 
 .obituary-content {
-  line-height: 1.6;
+	line-height: 1.6;
 }
 
-
 footer {
-  text-align: center;
-  margin-top: auto;
-  padding: 20px;
+	text-align: center;
+	margin-top: auto;
+	padding: 20px;
 }
 
 input[type="submit"].disable {
-  background: grey;
-  cursor: not-allowed;
+	background: grey;
+	cursor: not-allowed;
 }
 
 table#obituaries-table thead th {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 th.desc::after {
-  content: ' (desc)';
-  color: #006dad;
-  font-style: italic;
+	content: " (desc)";
+	color: #006dad;
+	font-style: italic;
 }
 
 th.asc::after {
-  content: ' (asc)';
-  color: #006dad;
-  font-style: italic;
+	content: " (asc)";
+	color: #006dad;
+	font-style: italic;
 }

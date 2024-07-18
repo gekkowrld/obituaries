@@ -1,19 +1,14 @@
-{% extends 'pages.html' %}
-
-{% block main %}
+{% extends 'pages.html' %} {% block main %}
 <div class="obituary-details">
   <h1>{{ obituary[1] }}</h1>
   <i>{{ time }}</i>
   <p><strong>Author:</strong> {{ obituary[5] }}</p>
   <p><strong>Born:</strong> {{ obituary[2] }}</p>
   <p><strong>Death:</strong> {{ obituary[3] }}</p>
-  <p><strong>Age:</strong> {{ live_age }} </p>
-  <hr>
-  <div class="obituary-content">
-    {{ content }}
-  </div>
-  <hr>
+  <p><strong>Age:</strong> {{ live_age }}</p>
+  <hr />
+  <div class="obituary-content">{{ content }}</div>
+  <hr />
   <i>{{ obituary[7] }}</i>
 </div>
 {% endblock %}
-

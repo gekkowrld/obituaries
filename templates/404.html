@@ -1,12 +1,26 @@
-{% extends 'pages.html' %}
-{% block main %}
-        <h1>Oops! It seems we lost this memory...</h1>
-        <p>It appears the page you're looking for has departed. Let's honor its memory with a moment of reflection.</p>
-        <p>In the meantime, you can:</p>
-        <ul>
-            <li>Return <a href="{{ url_for('home') }}">home</a> and cherish other beautiful memories.</li>
-            <li>Share a heartfelt <a href="{{ url_for('form') }}">obituary</a> of your own to brighten someone's day.</li>
-            <li>Visit our <a href="{{ url_for('view') }}">memorial gallery</a> to celebrate unforgettable lives.</li>
-        </ul>
-        <p>Remember, even our website needs a moment to gather its thoughts sometimes. Thank you for your understanding!</p>
-        {% endblock %}
+{% extends 'pages.html' %} {% block main %}
+<h1>Oops! It seems we lost this memory...</h1>
+<p>
+  It appears the page you're looking for has departed. Let's honor its memory
+  with a moment of reflection.
+</p>
+<p>In the meantime, you can:</p>
+<ul>
+  <li>
+    Return <a href="{{ url_for('home') }}">home</a> and cherish other beautiful
+    memories.
+  </li>
+  <li>
+    Share a heartfelt <a href="{{ url_for('form') }}">obituary</a> of your own
+    to brighten someone's day.
+  </li>
+  <li>
+    Visit our <a href="{{ url_for('view') }}">memorial gallery</a> to celebrate
+    unforgettable lives.
+  </li>
+</ul>
+<p>
+  Remember, even our website needs a moment to gather its thoughts sometimes.
+  Thank you for your understanding!
+</p>
+{% endblock %}
