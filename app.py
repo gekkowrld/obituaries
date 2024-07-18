@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import sqlite3
-from datetime import date
+from datetime import date, datetime
+import humanize
 
 import markdown2
 from flask import Flask, render_template, request, url_for
@@ -193,6 +194,8 @@ def view():
                 "details.html",
                 title=ob[1],
                 obituary=ob,
+                time=f"{ob[6]} ({humanize.naturaltime(datetime.strptime(ob[6], "%Y-%m-%d %H:%M:%S"))})",
+                live_age=humanize.naturaldate(datetime.strptime(ob[3], "%Y-%m-%d")-datetime.strptime(ob[2], "%Y-%m-%d")).split(',')[0],
                 description=ob[7],
                 og_image=img,
                 content=content,

@@ -1,6 +1,9 @@
 {% extends 'pages.html' %}
+{% block script %}
+<script src="{{ url_for('static', filename='form.js') }}" defer></script>
+{% endblock %}
 {% block main %}
-<form method="post" class="my_form">
+<form method="post" class="my_form" name="obituary">
   <div class="form-group">
     <label for="name">Name</label>
     <input name="name" id="name" type="text" required>
@@ -17,13 +20,13 @@
     <label for="content">Content</label>
     <textarea name="content" id="content" rows="15" cols="30" minlength="15" required></textarea>
     <!-- As seen in github -->
-    <div class="tafg">
+<div class="tafg"><a href="https://www.markdownguide.org/basic-syntax/">
       <span>
   <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true">
     <path d="M14.85 3c.63 0 1.15.52 1.14 1.15v7.7c0 .63-.51 1.15-1.15 1.15H1.15C.52 13 0 12.48 0 11.84V4.15C0 3.52.52 3 1.15 3ZM9 11V5H7L5.5 7 4 5H2v6h2V8l1.5 1.92L7 8v3Zm2.99.5L14.5 8H13V5h-2v3H9.5Z"></path>
 </svg>
     </span>
-      <span>Markdown Supported</span>
+<span>Markdown Supported</span></a>
     </div>
   </div>
   <div class="form-group">
@@ -35,7 +38,7 @@
     <input name="slug" id="slug" type="text" required>
   </div>
   <div class="form-group">
-    <input type="submit" value="Post obituary">
+    <input id="submit_btn" type="submit" value="Post obituary">
   </div>
 </form>
 {% endblock %}

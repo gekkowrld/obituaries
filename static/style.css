@@ -46,6 +46,16 @@ textarea:focus {
   outline: 1px solid black;
 }
 
+input[type="text"].error,
+input[type="date"].error,
+textarea.error {
+  border: 1px solid red;
+}
+
+img {
+  max-width: 90%;
+}
+
 input[type="submit"],label{
   padding: 5px;
 font-family: "Space Grotesk", sans-serif;
@@ -126,6 +136,7 @@ header a {
   text-decoration: none;
   padding: 10px;
   transition:background-color 0.3s ease;
+font-family: "Space Grotesk", sans-serif;
 }
 
 header a:hover {
@@ -231,4 +242,9 @@ footer {
   text-align: center;
   margin-top: auto;
   padding: 20px;
+}
+
+input[type="submit"].disable {
+  background: grey;
+  cursor: not-allowed;
 }
