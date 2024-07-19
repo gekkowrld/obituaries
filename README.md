@@ -57,13 +57,41 @@ Make sure you have the following installed:
 
 2. Open your web browser and go to [http://localhost:5000](http://localhost:5000) to view the application.
 
-### Usage
+## Usage (Navigation)
 
-- **Home:** Visit [http://localhost:5000](http://localhost:5000) to see the home page.
-- **Form:** Access [http://localhost:5000/form](http://localhost:5000/form) to submit a new obituary.
-- **View Obituaries:** Navigate to [http://localhost:5000/view](http://localhost:5000/view) to see all submitted obituaries.
+### Home: Visit [http://localhost:5000](http://localhost:5000) to see the home page.
 
-### Contributing
+![Home Page](./home.png)
+
+### Form Access [http://localhost:5000/form](http://localhost:5000/form) to submit a new obituary.
+
+Empty form
+
+![Empty submit form](./empty_form.png)
+
+Filled form
+
+![Filled form](./filled_form.png)
+
+Succesfull submission
+
+![Sucess submission message](./sucess_submit.png)
+
+Erroneous submission (only possible with no JS)
+
+![Errors during submission](./error_submit.png)
+
+### View Obituaries: Navigate to [http://localhost:5000/view](http://localhost:5000/view) to see all submitted obituaries.
+
+The obituaries are displayed 10 per page with page numbers below them.
+
+![List view of obituaries in available](./list_view.png)
+
+If you want to view the whole obituary, click the name of the obituary and it will take you to the page.
+
+![View of a single obituary](./cont_view.png)
+
+## Contributing
 
 If you'd like to contribute to this project, please follow these steps:
 
@@ -72,7 +100,7 @@ If you'd like to contribute to this project, please follow these steps:
 3. Commit your changes and push to your branch.
 4. Submit a pull request for review.
 
-### License
+## License
 
 This project is licensed under the GNU GPLV3 License - see the [LICENSE](LICENSE) file for details.
 

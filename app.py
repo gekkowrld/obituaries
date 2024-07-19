@@ -87,9 +87,9 @@ def form():
                 title="Form Submitted successfully",
                 header=f"{form_data.author}, {form_data.name} will now be honored because of you!",
                 msg="""
-                Thank you for submitting the obituary. Your contribution helps honor the memory of your loved one and shares their story with others.
-                If you have any further updates or would like to make changes, please don't hesitate to contact us.
-                We appreciate your trust in us during this difficult time.
+Thank you for submitting the obituary. Your contribution helps honor the memory of your loved one and shares their story with others.
+If you have any further updates or would like to make changes, please don't hesitate to contact us.
+We appreciate your trust in us during this difficult time.
                 """,
                 canonical_url=url_for("form", _external=True),
                 description=desc,
@@ -115,27 +115,6 @@ def form():
         form=form,
         canonical_url=url_for("form", _external=True),
         description=desc,
-        og_image=img,
-    )
-
-
-def render_submit_template(
-    title: str, msg: str, canonical_url=None, error: bool = False
-):
-    img = url_for("static", filename="favicon.svg", _external=True)
-    if canonical_url is None:
-        calee_name = (
-            inspect.currentframe().f_back.f_code.co_qualname
-        )  # Rely on feature introduced in python3.11 (https://stackoverflow.com/a/78562834)
-        canonical_url = url_for(calee_name, _external=True)
-
-    return render_template(
-        "submit_msg.html",
-        title=title,
-        msg=msg,
-        canonical_url=canonical_url,
-        description=desc,
-        error=error,
         og_image=img,
     )
 
@@ -221,9 +200,9 @@ def view():
                 "submit_msg.html",
                 title="No one has sent their memories, can you be the first?",
                 msg="""
-                    Sometimes silence can be the best memory that we have.
+Sometimes silence can be the best memory that we have.
                     
-                    We have no memories in our collection, submit some through our form.
+We have no memories in our collection, submit some through our form.
                     """,
                 error=True,
                 canonical_url=url_for("home", _external=True),
@@ -237,8 +216,8 @@ def view():
                 "submit_msg.html",
                 title="500: An Error occured",
                 msg="""
-                An error occured on our side, the tables in which we place the memories cannot be found :(
-                We'll try to create another one just for you!
+An error occured on our side, the tables in which we place the memories cannot be found :(
+We'll try to create another one just for you!
                 """,
                 canonical_url=url_for("view", _external=True),
                 error=True,
@@ -302,8 +281,8 @@ def view_obituary(slug):
                 "submit_msg.html",
                 title="500: An Error occured",
                 msg="""
-                An error occured on our side, the tables in which we place the memories cannot be found :(
-                We'll try to create another one just for you!
+An error occured on our side, the tables in which we place the memories cannot be found :(
+We'll try to create another one just for you!
                 """,
                 canonical_url=url_for("view_obituary", slug=slug, _external=True),
                 error=True,
